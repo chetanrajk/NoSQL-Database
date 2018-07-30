@@ -1,0 +1,457 @@
+
+  <------------ TestExecutive ---------->
+ =========================================
+
+  Demonstrating Requirement #1
+ ==============================
+  class std::function<bool __cdecl(void)>, declared in this function,
+  is only valid for C++11 and later versions.
+
+  passed -- "Use C++11"
+
+  Demonstrating Requirement #2
+ ==============================
+  A visual examination of all the submitted code will show only
+  use of streams and operators new and delete.
+
+  passed -- "Use streams and new and delete"
+
+  Demonstrating Requirement #3a - Creating DbElement
+ ====================================================
+  Creating a db element with key "Taylor":
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Mon Jul 30 15:14:56 2018  Jacob               Parent of family         ../dummy/Taylor/path           Professor,Graduate,Department,
+
+  passed -- "Create DbElement<NoSqlDb::Payload<std::string>>"
+
+  Demonstrating Requirement #3b - Creating DbCore and Requirement #9 - Implementing a Payload type
+ ==================================================================================================
+  After adding elements with keys:
+
+  Newton Taylor Abc Hunt Chetan Lee
+
+  Showing all the database elements:
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Mon Jul 30 15:14:56 2018  Jacob               Parent of family         ../dummy/Taylor/path           Professor,Graduate,Department,
+  Mon Jul 30 15:14:56 2018  Noah                Child of Jacob           ../dummy/Newton/path           Graduate,Department,Student,
+  Mon Jul 30 15:14:56 2018  Abcd                Description about        ../dummy/Abc/path              General,Employee,Department,
+  Mon Jul 30 15:14:56 2018  Chetanraj           Student Description      ../dummy/chetan/path           Student,Graduate,Computer Science,
+  Mon Jul 30 15:14:56 2018  Ethan               Child of Jacob           ../dummy/Hunt/path             Department,Graduate,Teaching Assistant,
+  Mon Jul 30 15:14:56 2018  William             Child of Jacob           ../dummy/Lee/path              Teaching Assistant,Graduate,Department,
+
+  Make some new elements children of element with key "Taylor"
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Mon Jul 30 15:14:56 2018  Jacob               Parent of family         ../dummy/Taylor/path           Professor,Graduate,Department,
+    child keys:  Lee Newton Hunt
+
+  Database keys are:
+
+  Newton Taylor Abc Hunt Chetan Lee
+
+  passed -- "Create DbCore<NoSqlDb::Payload<std::string>>"
+
+  Demonstrating Requirement 4 - Addition and Deletion of key/value pair
+ ========================================================================
+  Deleting key Abc from db...
+
+  DB after deleting
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Mon Jul 30 15:14:56 2018  Jacob               Parent of family         ../dummy/Taylor/path           Professor,Graduate,Department,
+    child keys:  Lee Newton Hunt
+  Mon Jul 30 15:14:56 2018  Noah                Child of Jacob           ../dummy/Newton/path           Graduate,Department,Student,
+  Mon Jul 30 15:14:56 2018  Chetanraj           Student Description      ../dummy/chetan/path           Student,Graduate,Computer Science,
+  Mon Jul 30 15:14:56 2018  Ethan               Child of Jacob           ../dummy/Hunt/path             Department,Graduate,Teaching Assistant,
+  Mon Jul 30 15:14:56 2018  William             Child of Jacob           ../dummy/Lee/path              Teaching Assistant,Graduate,Department,
+
+  Database keys are:
+  Newton Taylor Hunt Chetan Lee
+
+  Adding new key Newkey in db...
+
+  DB after adding
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Mon Jul 30 15:14:56 2018  Jacob               Parent of family         ../dummy/Taylor/path           Professor,Graduate,Department,
+    child keys:  Lee Newton Hunt
+  Mon Jul 30 15:14:56 2018  Noah                Child of Jacob           ../dummy/Newton/path           Graduate,Department,Student,
+  Mon Jul 30 15:14:56 2018  Chetanraj           Student Description      ../dummy/chetan/path           Student,Graduate,Computer Science,
+  Mon Jul 30 15:14:56 2018  Ethan               Child of Jacob           ../dummy/Hunt/path             Department,Graduate,Teaching Assistant,
+  Mon Jul 30 15:14:56 2018  William             Child of Jacob           ../dummy/Lee/path              Teaching Assistant,Graduate,Department,
+  Mon Jul 30 15:14:56 2018  New Key             Description about        ../dummy/Newkey/path           Department,Undergraduate,Student,
+
+  Database keys are:
+  Newton Taylor Hunt Chetan Lee Newkey
+
+  passed -- "Addition and Deletion of key/value pair"
+
+  Demonstrating Requirement 5 - Editing metadata, relationships and replacing instance
+ =======================================================================================
+ Changing name from  'Chetanraj' to 'Kadam'
+ Changing description from  'Student' to 'Graduate Student'
+ Making key 'Newkey' as its children
+ Replacing existing value's instance with new instance
+
+ DB after editing
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Mon Jul 30 15:14:56 2018  Jacob               Parent of family         ../dummy/Taylor/path           Professor,Graduate,Department,
+    child keys:  Lee Newton Hunt
+  Mon Jul 30 15:14:56 2018  Noah                Child of Jacob           ../dummy/Newton/path           Graduate,Department,Student,
+  Mon Jul 30 15:14:56 2018  Kadam               Graduate Student         ../dummy/chetan/path           Student,Graduate,Computer Science,
+    child keys:  Newkey
+  Mon Jul 30 15:14:56 2018  Ethan               Child of Jacob           ../dummy/Hunt/path             Department,Graduate,Teaching Assistant,
+  Mon Jul 30 15:14:56 2018  William             Child of Jacob           ../dummy/Lee/path              Teaching Assistant,Graduate,Department,
+  Mon Jul 30 15:14:56 2018  New Key             Description about        ../dummy/Newkey/path           Department,Undergraduate,Student,
+
+  passed -- "Editing metadata, relationships and replacing instance"
+
+  Demonstrating Requirement 6 - Support different queries
+ =========================================================
+
+====> Query1- Return the value of a specified key:  Chetan
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Mon Jul 30 15:14:56 2018  Kadam               Graduate Student         ../dummy/chetan/path           Student,Graduate,Computer Science,
+    child keys:  Newkey
+
+
+====> Query2- Return children of a specified key:  Taylor
+
+  Child Keys:   Lee     Newton  Hunt
+
+
+====> Query3- Return set of all keys matching pattern: New
+
+  Matched Keys:  Newton  Newkey
+
+====> Query4- Return set of all keys contain a "am" string in their Name section
+
+  Matched Keys:  Chetan  Lee
+
+====> Query5- Return set of all keys contain a "Child" string in their Description section
+
+  Matched Keys:  Newton  Hunt    Lee
+
+====> Query6- Return set of all keys contain a "Student" category in their Payload section
+
+  Matched Keys:  Newton  Chetan  Newkey
+
+====> Query7a- Return set of all keys from  "Wed Jan 10 15:30:00 2018" to "Mon Feb 5 16:30:00 2018"
+
+  Matched Keys:
+
+  There are no keys present within given time-date interval
+
+====> Query7b- Return set of all keys from  "Wed Jan 10 15:30:00 2018" to "Current time"
+
+  Matched Keys:  Newton  Taylor  Hunt    Chetan  Lee     Newkey
+
+  passed -- "Support different queries"
+
+
+  Demonstrating Requirement 7 - Support queries on queries and Union of queries
+ ===============================================================================
+
+====> Query8- Return keys who are child of "Taylor" and contain "am" in their Name section
+
+     (Running Query4 on set of keys returned by Query2)
+  Child Keys:   Lee     Newton  Hunt
+
+  Matched Keys:  Lee
+
+====> Query9- Return keys with matching pattern "New" or containing "Child" string in their Description section
+
+     (Union of Query3 and Query5)
+  Matched Keys:  Newton  Newkey
+  Matched Keys:  Newton  Hunt    Lee
+
+  Union of Matched Keys: Hunt Lee Newkey Newton
+
+  passed -- "Support queries on queries and Union of queries"
+
+
+  Demonstrating Requirement 8 - Persisting a DB contents
+ ========================================================
+
+====> Displaying XML representation of current database:
+
+
+  <db>
+    <dbRecord>
+      <key>
+        Newton
+      </key>
+      <value>
+        <name>
+          Noah
+        </name>
+        <description>
+          Child of Jacob
+        </description>
+        <dateTime>
+          Mon Jul 30 15:14:56 2018
+        </dateTime>
+        <payload>
+          <path>
+            ../dummy/Newton/path
+          </path>
+          <categories>
+            <category>
+              Graduate
+            </category>
+            <category>
+              Department
+            </category>
+            <category>
+              Student
+            </category>
+          </categories>
+        </payload>
+        <children>
+        </children>
+      </value>
+    </dbRecord>
+    <dbRecord>
+      <key>
+        Taylor
+      </key>
+      <value>
+        <name>
+          Jacob
+        </name>
+        <description>
+          Parent of family
+        </description>
+        <dateTime>
+          Mon Jul 30 15:14:56 2018
+        </dateTime>
+        <payload>
+          <path>
+            ../dummy/Taylor/path
+          </path>
+          <categories>
+            <category>
+              Professor
+            </category>
+            <category>
+              Graduate
+            </category>
+            <category>
+              Department
+            </category>
+          </categories>
+        </payload>
+        <children>
+          <child>
+            Lee
+          </child>
+          <child>
+            Newton
+          </child>
+          <child>
+            Hunt
+          </child>
+        </children>
+      </value>
+    </dbRecord>
+    <dbRecord>
+      <key>
+        Hunt
+      </key>
+      <value>
+        <name>
+          Ethan
+        </name>
+        <description>
+          Child of Jacob
+        </description>
+        <dateTime>
+          Mon Jul 30 15:14:56 2018
+        </dateTime>
+        <payload>
+          <path>
+            ../dummy/Hunt/path
+          </path>
+          <categories>
+            <category>
+              Department
+            </category>
+            <category>
+              Graduate
+            </category>
+            <category>
+              Teaching Assistant
+            </category>
+          </categories>
+        </payload>
+        <children>
+        </children>
+      </value>
+    </dbRecord>
+    <dbRecord>
+      <key>
+        Chetan
+      </key>
+      <value>
+        <name>
+          Kadam
+        </name>
+        <description>
+          Graduate Student
+        </description>
+        <dateTime>
+          Mon Jul 30 15:14:56 2018
+        </dateTime>
+        <payload>
+          <path>
+            ../dummy/chetan/path
+          </path>
+          <categories>
+            <category>
+              Student
+            </category>
+            <category>
+              Graduate
+            </category>
+            <category>
+              Computer Science
+            </category>
+          </categories>
+        </payload>
+        <children>
+          <child>
+            Newkey
+          </child>
+        </children>
+      </value>
+    </dbRecord>
+    <dbRecord>
+      <key>
+        Lee
+      </key>
+      <value>
+        <name>
+          William
+        </name>
+        <description>
+          Child of Jacob
+        </description>
+        <dateTime>
+          Mon Jul 30 15:14:56 2018
+        </dateTime>
+        <payload>
+          <path>
+            ../dummy/Lee/path
+          </path>
+          <categories>
+            <category>
+              Teaching Assistant
+            </category>
+            <category>
+              Graduate
+            </category>
+            <category>
+              Department
+            </category>
+          </categories>
+        </payload>
+        <children>
+        </children>
+      </value>
+    </dbRecord>
+    <dbRecord>
+      <key>
+        Newkey
+      </key>
+      <value>
+        <name>
+          New Key
+        </name>
+        <description>
+          Description about
+        </description>
+        <dateTime>
+          Mon Jul 30 15:14:56 2018
+        </dateTime>
+        <payload>
+          <path>
+            ../dummy/Newkey/path
+          </path>
+          <categories>
+            <category>
+              Department
+            </category>
+            <category>
+              Undergraduate
+            </category>
+            <category>
+              Student
+            </category>
+          </categories>
+        </payload>
+        <children>
+        </children>
+      </value>
+    </dbRecord>
+  </db>
+
+
+====> Persisting a collection of database contents to XML:
+
+
+  XML file is generated in project folder...
+  File name : ../noSqlDbContent.xml
+
+
+====> Restoring the database from new XML file:
+
+
+   File name:   ../newSqlDb.xml
+
+
+   Contents of the database after restoring from XML :
+
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Thu Feb  8 21:04:22 2018  John                Studying at SU           ../computer/Smith/location     Assistant,Syracuse,Department,
+  Thu Feb  8 21:04:22 2018  Mnopq               Random description       ../outside/SU/location         Syracuse,New York,
+  Thu Feb  8 21:04:22 2018  Patrick             Professor at SU          ../computer/Mass/location      Professor,Undergraduate,SU,
+    child keys:  Smith Parker
+  Thu Feb  8 21:04:22 2018  Peter               Alumni of university     ../computetr/Parker/folder     Student,Graduate,Computer Science,
+
+
+====> Augmenting the database from new XML :
+
+
+   File name:   ../newSqlDb2.xml
+
+
+   Contents of the database after augmenting:
+
+
+  DateTime                  Name                Description              Payload
+  ------------------------  --------            -----------------------  ----------------------------------------------------------
+  Thu Feb  8 21:04:22 2018  John                Studying at SU           ../computer/Smith/location     Assistant,Syracuse,Department,
+  Thu Feb  8 21:04:22 2018  Mnopq               Random description       ../outside/SU/location         Syracuse,New York,
+  Thu Feb  8 21:04:22 2018  New name            Addition of new element  ../nopath/location             catego,newone,
+  Thu Feb  8 21:04:22 2018  Patrick             Professor at SU          ../computer/Mass/location      Professor,Undergraduate,SU,
+    child keys:  Smith Parker
+  Thu Feb  8 21:04:22 2018  Peter               Alumni of university     ../computetr/Parker/folder     Student,Graduate,Computer Science,
+
+  passed -- "Persisting a DB contents"
+
+  all tests passed
+
+Press any key to continue . . .
